@@ -243,8 +243,8 @@ export default function CreateVPCSLink() {
                         <SelectItem value={currentHost}>
                           {currentHost}
                         </SelectItem>
-                        <SelectItem value="https://gaidep.baby/">
-                          https://gaidep.baby/
+                        <SelectItem value="https://nhungoc.sbs/">
+                          https://nhungoc.sbs/
                         </SelectItem>
                       </SelectGroup>
                     </SelectContent>
