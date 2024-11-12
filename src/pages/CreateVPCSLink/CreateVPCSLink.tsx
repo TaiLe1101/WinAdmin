@@ -43,13 +43,12 @@ export default function CreateVPCSLink() {
   const [destinationUrls, setDestinationUrls] = useState<string[]>([""]);
   const [loading, setLoading] = useState<boolean>(false);
   const { toast } = useToast();
-  const currentHost = window.location.origin + "/";
 
   const form = useForm<z.infer<typeof createVPCSLinkSchema>>({
     resolver: zodResolver(createVPCSLinkSchema),
     defaultValues: {
       slug: "",
-      domain: currentHost,
+      domain: "http://localhost:11121/",
       destinationUrl: [""],
       social: "NONE",
       variantUrl: "PERSON",
@@ -240,8 +239,8 @@ export default function CreateVPCSLink() {
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Domain</SelectLabel>
-                        <SelectItem value={currentHost}>
-                          {currentHost}
+                        <SelectItem value="http://localhost:11121/">
+                          http://localhost:11121/
                         </SelectItem>
                         <SelectItem value="https://nhungoc.sbs/">
                           https://nhungoc.sbs/

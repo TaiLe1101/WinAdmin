@@ -1,5 +1,5 @@
 import moment from "moment";
-import { vpcsLinkAPI } from "@/apis/vpcs-link";
+import { UpdateIsActiveVpcsLinkDTO, vpcsLinkAPI } from "@/apis/vpcs-link";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -17,6 +17,7 @@ import { VpcsLink } from "@/types/types";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Switch } from "@/components/ui/switch";
 
 export default function VPCSLink() {
   const [vpcsLinks, setVpcsLinks] = useState<VpcsLink[]>([]);
@@ -49,6 +50,45 @@ export default function VPCSLink() {
     setVpcsLinks(newVpcsLinks);
   }
 
+  const handleActive = async (
+    id: string,
+    reqBody: UpdateIsActiveVpcsLinkDTO
+  ) => {
+    // Hiển thị trạng thái loading cho từng switch
+    const newVpcsLinks = vpcsLinks.map((vpcsLink) =>
+      vpcsLink._id === id ? { ...vpcsLink, loading: true } : vpcsLink
+    );
+    setVpcsLinks(newVpcsLinks);
+
+    try {
+      const res = await vpcsLinkAPI.updateIsActiveVpcsLinkAPI(id, reqBody);
+      if (res.statusCode === 200) {
+        toast({
+          title: "Update",
+          description: "Update successfully",
+        });
+
+        // Cập nhật lại trạng thái isActive trong danh sách
+        const updatedVpcsLinks = vpcsLinks.map((vpcsLink) =>
+          vpcsLink._id === id
+            ? { ...vpcsLink, isActive: reqBody.isActive, loading: false }
+            : vpcsLink
+        );
+        setVpcsLinks(updatedVpcsLinks);
+      } else {
+        toast({
+          title: "Update",
+          description: "Update failed",
+        });
+      }
+    } catch {
+      toast({
+        title: "Update",
+        description: "Update failed",
+      });
+    }
+  };
+
   return (
     <section className="bg-[#fff] shadow-md rounded-md p-4">
       <div className="flex gap-2 items-center">
@@ -67,6 +107,7 @@ export default function VPCSLink() {
               <TableHead className="uppercase">Domain</TableHead>
               <TableHead className="uppercase">Link</TableHead>
               <TableHead className="uppercase">TOTAL CLICK</TableHead>
+              <TableHead className="uppercase">Active</TableHead>
               <TableHead className="uppercase">Create</TableHead>
               <TableHead className="uppercase">Update</TableHead>
               <TableHead className="uppercase">Action</TableHead>
@@ -88,6 +129,16 @@ export default function VPCSLink() {
                     >{`${vpcsLink.domain}f/${vpcsLink.slug}`}</a>
                   </TableCell>
                   <TableCell>{vpcsLink.visitAmount}</TableCell>
+                  <TableCell>
+                    <Switch
+                      checked={vpcsLink.isActive}
+                      onClick={() => {
+                        handleActive(vpcsLink._id, {
+                          isActive: !vpcsLink.isActive,
+                        });
+                      }}
+                    />
+                  </TableCell>
                   <TableCell>
                     {moment(vpcsLink.createdAt).format("DD/MM/YYYY - hh:mm:ss")}
                   </TableCell>

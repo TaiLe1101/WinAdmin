@@ -20,4 +20,19 @@ export const vpcsLinkAPI = {
     const res = await axiosClient.delete<ResAPI<boolean>>(`/vpcs-link/${id}`);
     return res.data;
   },
+
+  async updateIsActiveVpcsLinkAPI(
+    id: string,
+    reqBody: UpdateIsActiveVpcsLinkDTO
+  ) {
+    const res = await axiosClient.put<ResAPI<boolean>>(
+      `/vpcs-link/update-is-active/${id}`,
+      reqBody
+    );
+    return res.data;
+  },
 };
+
+export interface UpdateIsActiveVpcsLinkDTO {
+  isActive: boolean;
+}

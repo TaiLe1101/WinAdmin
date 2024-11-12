@@ -1,6 +1,6 @@
 import axios from "axios";
-// const endpoint = "http://localhost:11118/api/v1";
-const endpoint = "https://api-admin.devt.id.vn/api/v1";
+const endpoint = "http://localhost:11118/api/v1";
+// const endpoint = "https://api-admin.devt.id.vn/api/v1";
 
 const axiosClient = axios.create({
   baseURL: endpoint,
